@@ -11,7 +11,7 @@ const App = () => {
     //Check if localstorage is
     const storedTasks = JSON.parse(window.localStorage.getItem('tasks'))
     console.log(storedTasks)
-    if (storedTasks.length > 0) {
+    if (storedTasks != null &&storedTasks.length > 0) {
       setTasks(storedTasks)
     }
   }, [])
@@ -30,7 +30,7 @@ const App = () => {
   //Update the state object whenever the field is changed
   const handleFieldChange = (e) => {
     const { value } = e.target
-    // console.log(value)
+     console.log(value)
     setTitle(value)
   }
 
@@ -39,16 +39,32 @@ const App = () => {
     console.log('handle submit', title)
     //TODO: Why didn't it re-render when creating the temp container??
     // console.log(...tasks)
-    setTasks([...tasks, title])
-    setTitle('')
+    if (title !== ''&& !tasks.some((item) => item === title))
+    {
+      setTasks([...tasks, title])
+      setTitle('')
+    }
   }
 
-  const handleEdit = () => {
+  const handleEdit = (item) => {
     //TODO: Edit todo using the es6 find
+    const fakeTask = tasks
+    const index =  fakeTask.findIndex((element)=>element===item);
+    
+    if (title !== '' && index !== null  && index >= 0 && tasks.some((item) => item === title))
+    {
+      console.log('Editted')
+      fakeTask[index]= title;
+      setTasks(fakeTask)
+      setTitle('');
+    }
+
   }
 
-  const handleRemove = () => {
+  const handleRemove = (item) => {
     //TODO: Remove todo using es6 filter
+    const filtered = tasks.filter(value => value !== item);
+    setTasks(filtered);
   }
 
   return (
@@ -71,8 +87,8 @@ const App = () => {
         {tasks?.length > 0 ? tasks.map((item, index) => (
           <li key={index}>
             {item}
-            <button type="button" onClick={handleEdit}>Edit</button>
-            <button type="button" onClick={handleRemove}>Delete</button>
+            <button type="button" onClick={() => handleEdit(item)}>Edit</button>
+            <button type="button" onClick={() => handleRemove(item)}>Delete</button>
           </li>
         )) : "Nothing in list"}
       </ul>
