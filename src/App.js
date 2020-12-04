@@ -6,6 +6,9 @@ const App = () => {
 
   const [title, setTitle] = useState('')
   const [tasks, setTasks] = useState([])
+  const [editableRowIndex, setEditableRow] = useState(-1)
+  const [editableField, setEditableField] = useState('')
+
 
   useEffect(() => {
     //Check if localstorage is
@@ -34,6 +37,12 @@ const App = () => {
     setTitle(value)
   }
 
+  const handleEditFieldChange = (e) => {
+    const { value } = e.target
+    // console.log(value)
+    setEditableField(value)
+  }
+
   //Handles saving to the tasks array
   const handleSubmit = () => {
     console.log('handle submit', title)
@@ -43,17 +52,21 @@ const App = () => {
     setTitle('')
   }
 
-  const handleEdit = (todoIndex) => {
+  const toggleEditMode = (todoIndex) => {
     //TODO: Edit todo using the es6 find
     // console.log(tasks.findIndex((item, index) => todoIndex === index))
-    const replaceIndex = tasks.findIndex((item, index) => todoIndex === index)
-    tasks[replaceIndex] += " edited"
-    // console.log(tasks)
-    setTasks([...tasks])
+    setEditableRow(todoIndex)
   }
 
-  const handleSave = (index) => {
-    console.log('handle save')
+  const handleSave = () => {
+    console.log('handle save', editableField)
+
+    const replaceIndex = tasks.findIndex((item, index) => editableRowIndex === index)
+    tasks[replaceIndex] = editableField
+    console.log(tasks)
+    setTasks([...tasks])
+    setEditableRow(-1)
+
   }
 
   const handleRemove = () => {
@@ -77,15 +90,27 @@ const App = () => {
       </div>
 
       <ul style={{ listStyle: 'none' }}>
-        {tasks?.length > 0 ? tasks.map((item, index) => (
+        {tasks?.length > 0 ? tasks.map((task, index) => (
           <li
             style={{ display: 'flex', justifyContent: 'space-between' }}
             key={index}
           >
-            {item}
+            <input
+              type='text'
+              defaultValue={task}
+              disabled={index !== editableRowIndex}
+              onChange={handleEditFieldChange}
+            />
             <div>
-              <button type="button" onClick={() => handleEdit(index)}>Edit</button>
-              <button type="button" onClick={handleRemove}>Delete</button>
+              {index !== editableRowIndex ? (
+                <>
+                  <button type="button" onClick={() => toggleEditMode(index)}>Edit</button>
+                  <button type="button" onClick={handleRemove}>Delete</button>
+                </>
+              ) : (
+                  <button type="button" onClick={handleSave}>Save Changes</button>
+                )}
+
             </div>
           </li>
         )) : "Nothing in list"}
