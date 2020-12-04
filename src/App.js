@@ -1,9 +1,7 @@
 
 import { useState, useEffect } from 'react'
 import db from './config/firebase'
-
 import './App.css';
-
 
 const App = () => {
 
@@ -12,19 +10,17 @@ const App = () => {
   const [editableRowIndex, setEditableRow] = useState(-1)
   const [editableField, setEditableField] = useState('')
 
-
   useEffect(() => {
     //Check for existing data
     //TODO: Improve this!
     db.collection("todos")
-      .onSnapshot(function (querySnapshot) {
-        let tempTasks = []
-        querySnapshot.forEach((doc) => {
-          tempTasks = [...tempTasks, { id: doc.id, title: doc.data().title }]
-        });
-        // console.log(tempTasks)
-        setTasks(tempTasks)
-      });
+      .onSnapshot(snapshot => {
+        const tasks = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        setTasks(tasks)
+      })
 
   }, [])
 
