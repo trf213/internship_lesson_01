@@ -1,40 +1,48 @@
 
 import { useState, useEffect } from 'react'
+import db from './config/firebase'
+
 import './App.css';
+
 
 const App = () => {
 
-  const [title, setTitle] = useState('')
+  const [task, setTask] = useState('')
   const [tasks, setTasks] = useState([])
   const [editableRowIndex, setEditableRow] = useState(-1)
   const [editableField, setEditableField] = useState('')
 
 
   useEffect(() => {
-    //Check if localstorage is
-    const storedTasks = JSON.parse(window.localStorage.getItem('tasks'))
-    console.log(storedTasks)
-    if (storedTasks?.length > 0) {
-      setTasks(storedTasks)
-    }
+    //Check for existing data
+    //TODO: Improve this!
+    db.collection("todos")
+      .onSnapshot(function (querySnapshot) {
+        let tempTasks = []
+        querySnapshot.forEach((doc) => {
+          tempTasks = [...tempTasks, { id: doc.id, title: doc.data().title }]
+        });
+        // console.log(tempTasks)
+        setTasks(tempTasks)
+      });
+
   }, [])
 
   //UseEffect re-renders application whenever dependency objects are changed
-  useEffect(() => {
+  //TODO: Fix this!
+  // useEffect(() => {
 
-    //Save to localstorage whenever tasks is updated
-    if (tasks.length > 0) {
-      console.log('save tasks to localstorage')
-      window.localStorage.setItem('tasks', JSON.stringify(tasks))
-    }
+  //   //Save to firebase whenever new task is added
 
-  }, [tasks])
+  //   //Save to firebase whenever existing task is updated
+
+  // }, [tasks])
 
   //Update the state object whenever the field is changed
   const handleFieldChange = (e) => {
     const { value } = e.target
     // console.log(value)
-    setTitle(value)
+    setTask(value)
   }
 
   const handleEditFieldChange = (e) => {
@@ -45,11 +53,20 @@ const App = () => {
 
   //Handles saving to the tasks array
   const handleSubmit = () => {
-    console.log('handle submit', title)
+    console.log('handle submit', task)
     //TODO: Why didn't it re-render when creating the temp container??
     // console.log(...tasks)
-    setTasks([...tasks, title])
-    setTitle('')
+    // setTasks([...tasks, { title: task }])
+    const newTask = { title: task }
+    //TODO: Does this need to be here or is there a better way?
+    db.collection("todos").add(newTask)
+      .then((docRef) => {
+        console.log("Document written with ID: ", docRef.id);
+      })
+      .catch((error) => {
+        console.error("Error adding document: ", error);
+      });
+    setTask('')
   }
 
   const toggleEditMode = (todoIndex) => {
@@ -80,7 +97,7 @@ const App = () => {
         <input
           type='text'
           name="task_title"
-          value={title}
+          value={task}
           placeholder="Add task here"
           onChange={handleFieldChange}
         />
@@ -94,11 +111,11 @@ const App = () => {
         {tasks?.length > 0 ? tasks.map((task, index) => (
           <li
             style={{ display: 'flex', justifyContent: 'space-between' }}
-            key={index}
+            key={task.id}
           >
             <input
               type='text'
-              defaultValue={task}
+              defaultValue={task.title}
               disabled={index !== editableRowIndex}
               onChange={handleEditFieldChange}
             />
@@ -112,7 +129,7 @@ const App = () => {
                   <button type="button" onClick={handleSave}>Save Changes</button>
                 )}
 
-            </div>      
+            </div>
           </li>
         )) : "Nothing in list"}
       </ul>
