@@ -20,7 +20,7 @@ const App = () => {
           ...doc.data(),
         }))
         setTasks(tasks)
-      })
+      });
 
   }, [])
 
