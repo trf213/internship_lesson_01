@@ -55,6 +55,7 @@ const App = () => {
     // setTasks([...tasks, { title: task }])
     const newTask = { title: task }
     //TODO: Does this need to be here or is there a better way?
+     console.log(...tasks)
     db.collection("todos").add(newTask)
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
@@ -82,9 +83,17 @@ const App = () => {
 
   }
 
-  const handleRemove = (todoIndex) => {
+  const handleRemove = (todoId) => {
     //TODO: Remove todo using es6 filter
-    setTasks([...tasks.filter((item, index) => index !== todoIndex)])
+    // Filter to retrieve task that matches the id
+    const tempTask = tasks.filter((item) => item.id === todoId);
+    
+    db.collection('todos').doc(tempTask[0].id).delete().then(()=>{
+      console.log(`The todo ${tempTask[0].ti} has been removed`)
+      
+    }).catch((e)=>{
+      console.log('An error has occured');
+    });
   }
 
   return (
@@ -119,7 +128,7 @@ const App = () => {
               {index !== editableRowIndex ? (
                 <>
                   <button type="button" onClick={() => toggleEditMode(index)}>Edit</button>
-                  <button type="button" onClick={handleRemove}>Delete</button>
+                  <button type="button" onClick={()=>handleRemove(task.id)}>Delete</button>
                 </>
               ) : (
                   <button type="button" onClick={handleSave}>Save Changes</button>
