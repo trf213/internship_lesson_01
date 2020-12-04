@@ -11,7 +11,7 @@ const App = () => {
     //Check if localstorage is
     const storedTasks = JSON.parse(window.localStorage.getItem('tasks'))
     console.log(storedTasks)
-    if (storedTasks.length > 0) {
+    if (storedTasks?.length > 0) {
       setTasks(storedTasks)
     }
   }, [])
