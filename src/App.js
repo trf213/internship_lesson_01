@@ -69,8 +69,9 @@ const App = () => {
 
   }
 
-  const handleRemove = () => {
+  const handleRemove = (todoIndex) => {
     //TODO: Remove todo using es6 filter
+    setTasks([...tasks.filter((item, index) => index !== todoIndex)])
   }
 
   return (
@@ -111,7 +112,7 @@ const App = () => {
                   <button type="button" onClick={handleSave}>Save Changes</button>
                 )}
 
-            </div>
+            </div>      
           </li>
         )) : "Nothing in list"}
       </ul>
