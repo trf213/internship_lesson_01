@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react'
 import './App.css';
 
@@ -51,7 +50,7 @@ const App = () => {
     const fakeTask = tasks
     const index =  fakeTask.findIndex((element)=>element===item);
     
-    if (title !== '' && index !== null  && index >= 0 && tasks.some((item) => item === title))
+    if (title !== '' && index !== null  && index >= 0 )
     {
       console.log('Editted')
       fakeTask[index]= title;
@@ -68,7 +67,7 @@ const App = () => {
   }
 
   return (
-    <div className="App">
+    <div className="App  flex flex-col text-black py-10">
       <div>
         <input
           type='text'
@@ -85,10 +84,13 @@ const App = () => {
 
       <ul>
         {tasks?.length > 0 ? tasks.map((item, index) => (
-          <li key={index}>
+          <li key={index} className='my-5 flex flex-row justify-evenly'>
             {item}
-            <button type="button" onClick={() => handleEdit(item)}>Edit</button>
-            <button type="button" onClick={() => handleRemove(item)}>Delete</button>
+            <div>
+            <button type="button" className='rounded-lg border-green-500 bg-green-500 px-5 py-1 mx-5' onClick={() => handleEdit(item)}>Edit</button>
+            <button type="button" className='rounded-lg border-red-500 bg-red-500 px-5 py-1 mx-5' onClick={() => handleRemove(item)}>Delete</button>
+            </div>
+           
           </li>
         )) : "Nothing in list"}
       </ul>
