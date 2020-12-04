@@ -5,6 +5,9 @@ const App = () => {
 
   const [title, setTitle] = useState('')
   const [tasks, setTasks] = useState([])
+  const [editableRowIndex, setEditableRow] = useState(-1)
+  const [editableField, setEditableField] = useState('')
+
 
   useEffect(() => {
     //Check if localstorage is
@@ -31,6 +34,12 @@ const App = () => {
     const { value } = e.target
      console.log(value)
     setTitle(value)
+  }
+
+  const handleEditFieldChange = (e) => {
+    const { value } = e.target
+    // console.log(value)
+    setEditableField(value)
   }
 
   //Handles saving to the tasks array
