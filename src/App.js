@@ -75,9 +75,10 @@ const App = () => {
     console.log('handle save', editableField)
 
     const replaceIndex = tasks.findIndex((item, index) => editableRowIndex === index)
-    tasks[replaceIndex] = editableField
+    tasks[replaceIndex].title = editableField
+    db.collection('todos').doc(tasks[replaceIndex].id).set(tasks[replaceIndex]);
     console.log(tasks)
-    setTasks([...tasks])
+    
     setEditableRow(-1)
 
   }
