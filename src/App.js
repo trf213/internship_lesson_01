@@ -43,8 +43,17 @@ const App = () => {
     setTitle('')
   }
 
-  const handleEdit = () => {
+  const handleEdit = (todoIndex) => {
     //TODO: Edit todo using the es6 find
+    // console.log(tasks.findIndex((item, index) => todoIndex === index))
+    const replaceIndex = tasks.findIndex((item, index) => todoIndex === index)
+    tasks[replaceIndex] += " edited"
+    // console.log(tasks)
+    setTasks([...tasks])
+  }
+
+  const handleSave = (index) => {
+    console.log('handle save')
   }
 
   const handleRemove = () => {
@@ -67,12 +76,17 @@ const App = () => {
           </button>
       </div>
 
-      <ul>
+      <ul style={{ listStyle: 'none' }}>
         {tasks?.length > 0 ? tasks.map((item, index) => (
-          <li key={index}>
+          <li
+            style={{ display: 'flex', justifyContent: 'space-between' }}
+            key={index}
+          >
             {item}
-            <button type="button" onClick={handleEdit}>Edit</button>
-            <button type="button" onClick={handleRemove}>Delete</button>
+            <div>
+              <button type="button" onClick={() => handleEdit(index)}>Edit</button>
+              <button type="button" onClick={handleRemove}>Delete</button>
+            </div>
           </li>
         )) : "Nothing in list"}
       </ul>
