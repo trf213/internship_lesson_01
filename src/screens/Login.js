@@ -15,12 +15,23 @@ const Login = () => {
     const handleFieldChange = (e) => {
         const { name, value } = e.target
         //TODO: Handle input changes
+        
         setFields({ ...fields, [name]: value })
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
         //TODO: Handle form submission
+
+        if(fields.username !== '' && fields.password !== '')
+        {
+            loginUser(fields);
+            setFields({
+                username: '',
+                password: ''
+            });
+            
+        }
 
     }
 
