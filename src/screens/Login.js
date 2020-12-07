@@ -1,6 +1,10 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+
+import { AuthContext } from '../context/Auth'
 
 const Login = () => {
+
+    const { loginUser } = useContext(AuthContext)
 
     const [fields, setFields] = useState({
         username: '',
@@ -8,12 +12,16 @@ const Login = () => {
     })
 
 
-    const handleFieldChange = () => {
+    const handleFieldChange = (e) => {
+        const { name, value } = e.target
         //TODO: Handle input changes
+        setFields({ ...fields, [name]: value })
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault()
         //TODO: Handle form submission
+
     }
 
     //NOTE:Successful form submission must require both username and password submitted

@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import '../App.css';
 
 const Todo = () => {
@@ -78,6 +78,10 @@ const Todo = () => {
 
     return (
         <div className="App">
+            <div>
+                Welcome back
+                 {/* TODO: Display logged in user name here */}
+            </div>
             <div>
                 <input
                     type='text'

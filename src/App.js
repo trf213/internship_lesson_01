@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { createContext, useContext, useReducer } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -10,37 +10,44 @@ import {
 import Todo from './screens/Todo'
 import Login from './screens/Login'
 
+import { AuthProvider, AuthContext } from './context/Auth'
+
 const App = () => {
+
+  // const currentUser = useContext(AuthContext)
   return (
-    <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-            <li>
-              <Link to="/todo">Todo</Link>
-            </li>
-          </ul>
-        </nav>
+    <AuthProvider>
+      <Router>
+        <div>
+          <nav>
+            <ul>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/about">About</Link>
+              </li>
+              <li>
+                <Link to="/todo">Todo</Link>
+              </li>
+              {/* <li>Welcome back, {currentUser.name}</li> */}
+            </ul>
+          </nav>
 
-        {/* A <Switch> looks through its children <Route>s and
+          {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-        <Switch>
-          <Route path="/login" component={Login} />
-          <Route path="/about" component={About} />
+          <Switch>
+            <Route path="/login" component={Login} />
+            <Route path="/about" component={About} />
 
-          <Route path="/todo" component={Todo} />
+            <Route path="/todo" component={Todo} />
 
-          <Route path="/" component={Home} />
+            <Route path="/" component={Home} />
 
-        </Switch>
-      </div>
-    </Router>
+          </Switch>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 
