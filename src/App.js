@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 
 import Todo from './screens/Todo'
+import Login from './screens/Login'
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
+          <Route path="/login" component={Login} />
           <Route path="/about" component={About} />
 
           <Route path="/todo" component={Todo} />
